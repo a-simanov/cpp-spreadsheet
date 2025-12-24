@@ -26,6 +26,13 @@ struct Position {
     static const Position NONE;
 };
 
+class PositionHasher {
+public:
+    size_t operator()(const Position& pos) const {
+        return std::hash<std::string>()(pos.ToString());
+    }
+};
+
 struct Size {
     int rows = 0;
     int cols = 0;
@@ -39,7 +46,7 @@ public:
     enum class Category {
         Ref,    // ссылка на ячейку с некорректной позицией
         Value,  // ячейка не может быть трактована как число
-        Div0,  // в результате вычисления возникло деление на ноль
+        Arithmetic,  // в результате вычисления возникло деление на ноль
     };
 
     FormulaError(Category category);
