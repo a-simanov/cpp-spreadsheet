@@ -12,7 +12,9 @@ using namespace std::literals;
 Sheet::~Sheet() {}
 
 void Sheet::SetCell(Position pos, std::string text) {
-    CheckPosValid(pos);
+    if (!pos.IsValid()) {
+        throw InvalidPositionException("Incorrect position");
+    }
     auto& cell_ptr = cells_[pos];
     if (!cell_ptr) {
         cell_ptr = std::make_unique<Cell>(*this);
@@ -22,34 +24,35 @@ void Sheet::SetCell(Position pos, std::string text) {
 }
 
 const CellInterface* Sheet::GetCell(Position pos) const {
-    CheckPosValid(pos);
-    const auto cell = cells_.find(pos);
-    if (cell != nullptr) {
-        return cell->second.get();
+    if (!pos.IsValid()) {
+        throw InvalidPositionException("Incorrect position");
+    }
+    const auto iter = cells_.find(pos);
+    if (iter != cells_.end()) {
+        return iter->second.get();
     }
     return nullptr;
 }
 
 CellInterface* Sheet::GetCell(Position pos) {
-    CheckPosValid(pos);
-    const auto cell = cells_.find(pos);
-    if (cell != nullptr) {
-        return cell->second.get();
+    if (!pos.IsValid()) {
+        throw InvalidPositionException("Incorrect position");
+    }
+    const auto iter = cells_.find(pos);
+    if (iter != cells_.end()) {
+        return iter->second.get();
     }
     return nullptr;
 }
 
 void Sheet::ClearCell(Position pos) {
-    CheckPosValid(pos);
-    auto cell = cells_.find(pos);
-    if (cell != nullptr) {
-        cells_.erase(cell);
-    }
-}
-
-void Sheet::CheckPosValid(const Position& pos) const {
     if (!pos.IsValid()) {
         throw InvalidPositionException("Incorrect position");
+    }
+    auto iter = cells_.find(pos);
+    if (iter != cells_.end()) {
+        dynamic_cast<Cell*>(iter->second.get())->Clear();
+        cells_.erase(iter);
     }
 }
 

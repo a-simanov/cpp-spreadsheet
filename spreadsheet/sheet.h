@@ -21,7 +21,5 @@ public:
     void PrintValues(std::ostream& output) const override;
     void PrintTexts(std::ostream& output) const override;
 private:
-    void CheckPosValid(const Position& pos) const;
-
     std::unordered_map<Position, std::unique_ptr<CellInterface>, PositionHasher> cells_;
 };

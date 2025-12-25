@@ -53,15 +53,7 @@ void Cell::Set(std::string text) {
 }
 
 void Cell::Clear() {
-    impl_ = std::make_unique<EmptyImpl>();
-    for (const auto& pos : referenced_cells_) {
-        pos->dependent_cells_.erase(this);
-    }
-    referenced_cells_.clear();
-    impl_->InvalidateCache();
-    for (auto dep_cell : dependent_cells_) {
-        dep_cell->Clear();
-    }
+    Set("");
 }
 
 void Cell::CheckCicleDependency(const std::vector<Position>& referenced_cells) const {
