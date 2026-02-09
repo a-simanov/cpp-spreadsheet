@@ -1,2 +1,4 @@
-# cpp-spreadsheet
-Дипломный проект: Электронная таблица
+# Spreadsheet
+Prototype of spreadsheet.
+Supporting any data type.
+
